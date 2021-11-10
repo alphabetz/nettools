@@ -1,4 +1,4 @@
-import paramiko
+#import paramiko
 import os.path
 import time
 import sys
@@ -12,24 +12,24 @@ else:
     print("\n File does not exist please recheck your path and file name.")
     sys.exit()
 
-command_file = input("\n# Enter command file path and name: ")
-if os.path.isfile(user_file):
+cmd_file = input("\n# Enter command file path and name: ")
+if os.path.isfile(cmd_file):
     print("\n *command loaded* \n")
 else:
     print("\n File does not exist please recheck your path and file name.")
     sys.exit()
 
+
 def ssh_connection(ip):
     global user_file
-    global command_file
+    global cmd_file
 
     try:
         selected_user_file = open(user_file, 'r')
         selected_user_file.seek(0)
         lines = selected_user_file.readlines()
-        username = selected_user_file.readlines()[0].split(',')[0].rstrip("\n")
-        selected_user_file.seek(0)
-        password = selected_user_file.readlines()[0].split(',')[1].rstrip("\n")
+        for line in lines:
+            username, password = line.rstrip('\n').split(',')
 
         session = paramiko.SSHClient()
         session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
