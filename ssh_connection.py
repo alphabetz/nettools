@@ -33,7 +33,7 @@ def ssh_connection(ip):
 
         session = paramiko.SSHClient()
         session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        session.connect(ip.rstip("\n"), username = username, password = password)
+        session.connect(ip.rstrip("\n"), username = username, password = password)
         connection = session.invoke_shell()
 
         connection.send("enable\n")
