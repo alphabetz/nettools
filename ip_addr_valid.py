@@ -5,6 +5,7 @@ import ipaddress
 
 def ip_addr_valid(list):
     for ip in list:
+        ip = ip.rstrip()
         if (
             ipaddress.ip_address(ip).is_multicast
             or ipaddress.ip_address(ip).is_global
