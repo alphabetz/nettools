@@ -154,3 +154,5 @@ cython_debug/
 
 # Script testing
 test_script.py
+ip.txt
+user.txt
