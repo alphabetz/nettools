@@ -52,6 +52,7 @@ def ssh_connection(ip):
                 print(line, end="")
         time.sleep(2)
 
+        ssh.close()
         selected_user_file.close()
         selected_cmd_file.close()
 
