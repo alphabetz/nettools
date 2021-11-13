@@ -30,34 +30,39 @@ def ssh_connection(ip):
         lines = selected_user_file.readlines()
         for line in lines:
             username, password = line.rstrip('\n').split(',')
-
-        session = paramiko.SSHClient()
-        session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        session.connect(ip.rstrip("\n"), username = username, password = password)
-        connection = session.invoke_shell()
-
-        connection.send("enable\n")
-        connection.send("terminal length 0\n")
-        time.sleep(1)
-
-        connection.send("\n")
-        connection.send("configure terminal")
-        time.sleep(1)
-
+        
         selected_cmd_file = open(cmd_file, 'r')
         selected_cmd_file.seek(0)
-        for each_line in selected_cmd_file.readlines():
-            connection.send(each_line + '\n')
+        cmd_list = selected_cmd_file.readlines()
+        for line in cmd_list:
+            cmd_line = line.split(',')
+
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(ip.rstrip("\n"), username = username, password = password)
+        print(f"Connecting to \x1b[0;30;42m'{ip}'\x1b[0m with username \x1b[0;30;42m'{username}'\x1b[0m")
+        time.sleep(2)
+
+        for cmd in cmd_line:
+            cmd = cmd.lstrip()
+            print(f"Sending \x1b[2;30;44m'{cmd}'\x1b[0m command to \x1b[0;30;42m'{ip}'\x1b[0m")
             time.sleep(2)
-        
+            stdin, stdout, stderr = ssh.exec_command(cmd, get_pty=True)
+            for line in iter(stdout.readline, ""):
+                print(line, end="")
+        time.sleep(2)
+
         selected_user_file.close()
         selected_cmd_file.close()
 
+        # Error catching on ssh output to be implemented
+        '''
         router_output = connection.recv(65535)
         if re.search(b"% Invalid input", router_output):
             print("* There was at least one IOS syntax error on device {} :(".format(ip))
         else:
             print("\nDONE for device {} :)\n".format(ip))
+        '''
     except paramiko.AuthenticationException:
         print("* Invalid username or password :( \n* Please check the username/password file or the device configuration.")
         print("* Closing program... Bye!")
