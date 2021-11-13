@@ -3,9 +3,9 @@ import sys
 
 # Check whether file contaning ip is valid.
 def ip_file_valid():
-    ip_file = input("\n# Enter IP file path and name: ")
+    ip_file = input("\n# Enter IPv4 address file path and name: ")
     if os.path.isfile(ip_file):
-        print("\n* IP file is valid \n")
+        print("\n* IPv4 address file is valid \n")
     else:
         print("\n File {} does not exist please recheck.\n",format(ip_file))
         sys.exit()
