@@ -39,7 +39,7 @@ def ssh_connection(ip):
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ip.rstrip("\n"), username = username, password = password)
+        ssh.connect(ip.rstrip("\n"), username = username, password = password.strip())
         print(f"Connecting to \x1b[0;30;42m'{ip}'\x1b[0m with username \x1b[0;30;42m'{username}'\x1b[0m")
         time.sleep(2)
 
@@ -51,20 +51,12 @@ def ssh_connection(ip):
             for line in iter(stdout.readline, ""):
                 print(line, end="")
         time.sleep(2)
-
         selected_user_file.close()
         selected_cmd_file.close()
+        ssh.close()
 
-        # Error catching on ssh output to be implemented
-        '''
-        router_output = connection.recv(65535)
-        if re.search(b"% Invalid input", router_output):
-            print("* There was at least one IOS syntax error on device {} :(".format(ip))
-        else:
-            print("\nDONE for device {} :)\n".format(ip))
-        '''
     except paramiko.AuthenticationException:
-        print("* Invalid username or password :( \n* Please check the username/password file or the device configuration.")
-        print("* Closing program... Bye!")
+        print("* Invalid username or password \n* Please check the username/password file or the device configuration.")
+        print("* Closing program...")
 
 
