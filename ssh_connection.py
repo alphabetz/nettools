@@ -51,9 +51,10 @@ def ssh_connection(ip):
             for line in iter(stdout.readline, ""):
                 print(line, end="")
         time.sleep(2)
+
+        ssh.close()
         selected_user_file.close()
         selected_cmd_file.close()
-        ssh.close()
 
     except paramiko.AuthenticationException:
         print("* Invalid username or password \n* Please check the username/password file or the device configuration.")
