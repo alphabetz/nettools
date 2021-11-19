@@ -33,19 +33,15 @@ def ssh_connection(ip):
         
         selected_cmd_file = open(cmd_file, 'r')
         selected_cmd_file.seek(0)
-        cmd_list = selected_cmd_file.readlines()
-        for line in cmd_list:
-            cmd_line = line.split(',')
 
         ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.RejectPolicy()())
+        ssh.set_missing_host_key_policy(paramiko.RejectPolicy())
         ssh.connect(ip.rstrip("\n"), username = username, password = password.strip())
         print(f"Connecting to \x1b[0;30;42m'{ip}'\x1b[0m with username \x1b[0;30;42m'{username}'\x1b[0m")
         time.sleep(2)
 
-        for cmd in cmd_line:
-            cmd = cmd.lstrip()
-            print(f"Sending \x1b[2;30;44m'{cmd}'\x1b[0m command to \x1b[0;30;42m'{ip}'\x1b[0m")
+        for cmd in selected_cmd_file.readlines():
+            print(f"Sending \x1b[2;30;44m'{cmd.strip()}'\x1b[0m command to \x1b[0;30;42m'{ip}'\x1b[0m")
             time.sleep(2)
             stdin, stdout, stderr = ssh.exec_command(cmd, get_pty=True)
             for line in iter(stdout.readline, ""):
