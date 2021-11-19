@@ -38,7 +38,7 @@ def ssh_connection(ip):
             cmd_line = line.split(',')
 
         ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.set_missing_host_key_policy(paramiko.RejectPolicy()())
         ssh.connect(ip.rstrip("\n"), username = username, password = password.strip())
         print(f"Connecting to \x1b[0;30;42m'{ip}'\x1b[0m with username \x1b[0;30;42m'{username}'\x1b[0m")
         time.sleep(2)
