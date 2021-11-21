@@ -2,7 +2,6 @@ import paramiko
 import os.path
 import time
 import sys
-import re
 
 # Check username/password file exist
 user_file = input("\n# Enter user file path and name: ")
